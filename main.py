@@ -61,7 +61,7 @@ def display_notifications(students):
     for student in students:
         if int(student['attendance_percentage']) < 50:
             print(f"{student['name']} has low attendance!")
-        elif float(student['attendance_percentage']) > 50:
+        elif int(student['attendance_percentage']) > 50:
             i += 1
     
     if len(students) == i:

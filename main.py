@@ -9,10 +9,13 @@ def add_student(students):
         'daily_attendance': []
     }
 
+    attendance_percentage = 0
+
     student = {
         'name': name,
         'roll_no': roll_no,
-        'attendance_data': attendance_data
+        'attendance_data': attendance_data,
+        'attendance_percentage': attendance_percentage
     }
 
     students.append(student)
@@ -23,10 +26,11 @@ def display_students(students):
         print("No students to display.\n")
         return
 
+    print("<=====================>\n")
     print("Student Details:")
     for student in students:
-        attendance_percentage = (sum(student['attendance_data']['daily_attendance']) / len(student['attendance_data']['daily_attendance']) * 100) if student['attendance_data']['daily_attendance'] else 0
-        print(f"Name: {student['name']}, Roll No: {student['roll_no']}, Attendance: {attendance_percentage:.2f}%")
+        student['attendance_percentage'] = (sum(student['attendance_data']['daily_attendance']) / len(student['attendance_data']['daily_attendance']) * 100) if student['attendance_data']['daily_attendance'] else 0
+        print(f"Name: {student['name']}, Roll No: {student['roll_no']}, Attendance: {student['attendance_percentage']:.2f}%")
     print()
 
 def take_attendance(students):
@@ -34,6 +38,7 @@ def take_attendance(students):
         print("No students to take attendance for.\n")
         return
 
+    print("<=====================>\n")
     today = datetime.now().strftime("%Y-%m-%d")
     print(f"Taking attendance for {today}...")
 
@@ -46,15 +51,34 @@ def take_attendance(students):
 
     print("Attendance recorded successfully!\n")
 
+def display_notifications(students):
+    print("<=====================>\n")
+    i = 0
+    if not students:
+        print("Students data is empty!\n")
+        return
+    
+    for student in students:
+        if int(student['attendance_percentage']) < 50:
+            print(f"{student['name']} has low attendance!")
+        elif float(student['attendance_percentage']) > 50:
+            i += 1
+    
+    if len(students) == i:
+        print("You have no new notifications.")
+    print("<=====================>\n")
+
 
 def main():
     students = []
 
     while True:
+        print("Choose your option.") 
         print("1. Add Student")
         print("2. Display Students")
         print("3. Take Attendance")
-        print("4. Exit")
+        print("4. View notifications")
+        print("5. Exit")
         choice = input("Enter your choice: ")
 
         if choice == '1':
@@ -64,7 +88,9 @@ def main():
         elif choice == '3':
             take_attendance(students)
         elif choice == '4':
-            print("Exiting the program.")
+            display_notifications(students)
+        elif choice == '5':
+            print("Exiting the program...")
             break
         else:
             print("Invalid choice. Please try again.\n")
